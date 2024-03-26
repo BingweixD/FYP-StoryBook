@@ -1,0 +1,239 @@
+/* Existing CSS ... */
+
+/* Typing Animation CSS */
+@keyframes typing {
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent }
+  50% { border-color: black }
+}
+.typing {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: .15em solid black; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: .15em; /* Adjust as needed */
+  animation: 
+    typing 3.5s steps(40, end),
+    blink-caret .75s step-end infinite;
+}
+.chat-log {
+  max-height: 80vh; /* Adjust based on your layout */
+  overflow-y: auto;
+}
+.message {
+  word-wrap: break-word;
+  word-break: break-word; /* Use break-all to break at any character */
+}
+
+
+
+.typing-animation {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 3px solid black;
+  animation: typing 2s steps(40, end), blink-caret .75s step-end infinite;
+}
+
+.App {
+  text-align: center;
+  display: flex;
+  background-color: #282c34;
+  color:white;
+  position:absolute;
+  top:0;bottom:0;right: 0;left: 0;
+}
+.sidemenu {
+  width: 260px;
+  padding: 10px;
+  background-color: #202123;
+}
+.sidemenu-button span {
+  padding-left: 6px;
+  padding-right:12px;
+}
+
+.sidemenu-button{
+  padding:15px;
+  border:1px solid white;
+  border-radius: 5px;
+  text-align: left;
+  transition:ease 0.25s
+}
+.sidemenu-button:hover{
+  background-color: rgba(255,255,255,0.1);  
+}
+.chatbox {
+  flex: 1;
+  background-color: #343541;
+  position: relative;
+}
+
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+.chat-input-holder {
+  padding: 12px;
+  position:absolute;
+  bottom:0;
+  left:0;right: 0;
+}
+
+.chat-input-textarea {
+  background-color: #40414f;
+  width:90%;
+  padding:12px;
+  border-radius:5px;
+  color:white;
+  font-size: 1.25em;
+  border:none;
+  margin: 12px;
+  outline: none;
+  box-shadow:0 0 8px 0 rgba(0,0,0,0.25);
+}
+.chat-log {
+  text-align: left;
+}
+
+.chat-message.chatgpt {
+  background-color: #444654;
+}
+.chat-message img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+.chat-message-center {
+  max-width: 640px;
+  margin-left:auto;
+  margin-right: auto;
+  display: flex;
+  padding: 12px;
+  padding-left: 24px;
+  padding-right: 24px;
+  
+}
+.chat-message {
+  opacity: 0;
+  transform: scale(0.95);
+  animation: fadeInUp 0.3s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.avatar {
+  background-color: white;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  overflow: hidden; /* Ensures nothing spills outside the circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px; /* Adjust as necessary */
+  flex-shrink: 0; /* Prevents the avatar from shrinking */
+}
+
+  
+.avatar.chatgpt {
+  background-color:#0da37f;
+  border-radius: 50%;
+  width: 30px; /* Fixed width */
+  height: 30px; /* Fixed height */
+  overflow: hidden; /* Ensures nothing spills outside the circle */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.message {
+  background-color: #252b2f; /* Example background color for message bubble */
+  border-radius: 15px; /* Rounded corners for the message bubble */
+  margin-left: 10px; /* Space between the avatar and the message */
+  padding: 10px; /* Padding inside the message bubble */
+  flex-grow: 1; /* Allows the message bubble to grow */
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+.ai-generated-image {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 5px; /* Optional: Rounded corners */
+}
+
+/* homepage */
+/* src/App.css */
+.App {
+  text-align: center;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  padding: 20px;
+}
+
+.thumbnail {
+  position: relative;
+  overflow: hidden;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.add-story-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 24px;
+  cursor: pointer;
+}
