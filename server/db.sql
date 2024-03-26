@@ -1,7 +1,7 @@
-CREATE TABLE pdfs (
+CREATE TABLE users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    story_id INT,
-    pdf BLOB,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (story_id) REFERENCES stories(id)
+    username VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    UNIQUE KEY unique_username (username)
 );
+
