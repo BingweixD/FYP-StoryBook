@@ -1,4 +1,10 @@
-const mysql = require("mysql");
+require('dotenv').config();
+const express = require('express');
+const mysql = require('mysql');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const app = express();
+app.use(express.json());
 
 const pool = mysql.createPool({
   connectionLimit: 10,
@@ -9,11 +15,11 @@ const pool = mysql.createPool({
   database: "FYP local connections",
 });
 
-function connect(callback) {
-  pool.getConnection((err, connection) => {
-    if (err) return callback(err);
-    callback(null, connection);
-  });
-}
+// Verify connection
+pool.getConnection((err, connection) => {
+  if (err) throw err;
+  console.log("Connected to database");
+  connection.release();
+});
 
-module.exports = { connect };
+app.listen(3000, () => console.log('Server running on port 3000'));
