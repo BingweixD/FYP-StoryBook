@@ -27,8 +27,9 @@ function createCoverImagePrompt(story) {
     return story.substring(0, endIndex) + "..."; // Return this as the prompt, indicating it's a snippet.
 }
 
-async function generateImage(story, styleHints, previousAttributes, referenceImages = []) {
+async function generateImage(story, styleHints, previousAttributes, referenceImages = [], seed = null) {
     console.time("generateImage"); // Start timing
+    console.log("Using seed for image generation:", seed);
 
     const coverPrompt = createCoverImagePrompt(story);
     const splitIndex = findSplitIndex(story, Math.floor(story.length / 2));
@@ -49,12 +50,19 @@ async function generateImage(story, styleHints, previousAttributes, referenceIma
         if (previousAttributes) prompt += ` Include ${previousAttributes}, maintaining the color palette and character design of previous images.`;
         if (referenceImages && referenceImages.length > 0) prompt += ` Reference images are provided to maintain consistency.`;
 
-        return axios.post('https://api.openai.com/v1/images/generations', {
+        // The payload now includes a seed if it is not null
+        const payload = {
             model: "dall-e-3",
             prompt,
             n: 1,
             size: "1024x1024",
-        }, {
+        };
+        
+        if (seed !== null) {
+            payload.seed = seed;
+        }
+
+        return axios.post('https://api.openai.com/v1/images/generations', payload, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${DALLE_API_KEY}`
@@ -88,6 +96,7 @@ async function generateImage(story, styleHints, previousAttributes, referenceIma
         return [];
     }
 }
+
 
 
 
@@ -381,7 +390,62 @@ app.post('/generate-pdf', async (req, res) => {
 //         res.status(500).send('Internal Server Error');
 //     }
 // });
-
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+  
+    if (!token) return res.status(401).send('Token required');
+  
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+      if (err) return res.status(403).send('Token invalid');
+      req.user = user;
+      next();
+    });
+  };
+  
+// User registration endpoint
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10); // Hash the password
+  
+    pool.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword], (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error registering new user');
+      }
+      res.status(201).send('User registered');
+    });
+  });
+  
+  // User login endpoint
+  app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+  
+    pool.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send('Error logging in user');
+      }
+  
+      if (results.length === 0) {
+        return res.status(401).send('No such user found');
+      }
+  
+      const user = results[0];
+      const isMatch = await bcrypt.compare(password, user.password); // Compare password with hashed password in DB
+  
+      if (!isMatch) {
+        return res.status(401).send('Password is incorrect');
+      }
+  
+      // Generate JWT token
+      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '24h' });
+      res.json({ token });
+    });
+  });
+  
+  
+  
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
