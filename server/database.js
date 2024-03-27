@@ -15,11 +15,18 @@ const pool = mysql.createPool({
   database: "FYP local connections",
 });
 
-// Verify connection
+// Verify database connection
 pool.getConnection((err, connection) => {
   if (err) throw err;
   console.log("Connected to database");
   connection.release();
 });
 
+// Registration endpoint
+app.post('/register', async (req, res) => {
+  const { username, password } = req.body;
+  // The rest of the registration code goes here
+});
+
+// Listen on a port
 app.listen(3000, () => console.log('Server running on port 3000'));
